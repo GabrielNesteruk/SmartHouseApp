@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:paddingLeft="15dp">
+
+    <TextView
+        android:id="@+id/menu_slogan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wybierz interesującą Cię opcję"
+        android:layout_marginBottom="35dp"
+        android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SmartHouse"
+        android:textSize="24sp"
+        android:layout_above="@id/menu_slogan"
+        android:textColor="@color/black"
+        android:id="@id/app_name"/>
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_above="@id/app_name"
+        android:src="@drawable/ic_menu_logo"
+        android:layout_marginBottom="2dp"/>
+
+</RelativeLayout>
