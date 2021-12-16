@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SmartHouse</string>
+    <string name="serverIp">serverIp</string>
 </resources>

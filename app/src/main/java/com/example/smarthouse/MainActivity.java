@@ -1,24 +1,32 @@
 package com.example.smarthouse;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.os.Handler;
+import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
-import android.view.WindowManager;
+import android.view.Window;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.smarthouse.network.PingService;
 import com.example.smarthouse.utility.RoomCardView.CardViewAdapter;
 import com.example.smarthouse.utility.RoomCardView.CardViewHelper;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
@@ -29,6 +37,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private ImageView menuBurger;
 
+    private SharedPreferences mPreferences;
+    private SharedPreferences.Editor mEditor;
+
+    private PingService pingService;
+    private Handler mainHandler;
+
+
+    private Snackbar connectionSnackbar;
+    private Boolean noConnection;
+    private static final String TAG = "MainAcvitivty";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +55,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             this.getSupportActionBar().hide();
         setContentView(R.layout.activity_main);
 
+        Window window = this.getWindow();
+        window.setStatusBarColor(getResources().getColor(R.color.black));
+
         featuredRecycler = findViewById(R.id.featured_recycler);
         featuredRecycler();
 
@@ -44,10 +65,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView = findViewById(R.id.navigation_view);
         menuBurger = findViewById(R.id.menu_burger);
 
-        ImageView connectionImg = findViewById(R.id.connectionImg);
-        connectionImg.setOnClickListener(v -> {
-            Toast.makeText(this, "Jesteś połączony z siecią.", Toast.LENGTH_SHORT).show();
+        mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        mEditor = mPreferences.edit();
+        checkSharedPreferences();
+
+        mainHandler = new Handler(Looper.getMainLooper());
+        pingService = new PingService(mPreferences.getString(getString(R.string.serverIp), ""), mainHandler);
+        pingService.pingServer((r) -> {
+            handlePingCallback(r);
         });
+
+        ImageView connectionImg = findViewById(R.id.connectionImg);
 
         navigationDrawer();
     }
@@ -83,6 +111,73 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+        if(!noConnection && item.getItemId() != R.id.nav_settings)
+            return false;
+
+        switch(item.getItemId())
+        {
+            case R.id.nav_settings:
+            {
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                settingsIntent.putExtra("serverIp", mPreferences.getString(getString(R.string.serverIp), ""));
+                startActivityForResult(settingsIntent, 1);
+                break;
+            }
+        }
+
+        drawerLayout.closeDrawer(GravityCompat.START);
+
         return true;
+    }
+
+    private void checkSharedPreferences() {
+        String serverAddress = mPreferences.getString(getString(R.string.serverIp), "");
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode)
+        {
+            case 1:
+            {
+                if(resultCode == Activity.RESULT_OK)
+                {
+                    String ip = data.getStringExtra("ip");
+                    mEditor.putString("serverIp", ip);
+                    mEditor.commit();
+                    pingService.updateIp(mPreferences.getString(getString(R.string.serverIp), ""));
+                    pingService.pingServer((r) -> {
+                        handlePingCallback(r);
+                    });
+                }
+                break;
+            }
+        }
+    }
+
+    private void handlePingCallback(int result) {
+        if (result == 0) {
+
+            if(connectionSnackbar != null) connectionSnackbar.dismiss();
+
+            ((ImageView)(findViewById(R.id.connectionImg)))
+                    .setImageDrawable(getDrawable(R.drawable.ic_wifi_on));
+            Toast.makeText(MainActivity.this, "Połączono z serwerem", Toast.LENGTH_SHORT).show();
+        } else {
+            connectionSnackbar = Snackbar.make(drawerLayout, "Brak połączenia z serwerm", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("Ponów", v -> {
+                        pingService.updateIp(mPreferences.getString(getString(R.string.serverIp), ""));
+                        pingService.pingServer((r) -> {
+                            handlePingCallback(r);
+                        });
+                    })
+                    .setActionTextColor(Color.RED);
+            connectionSnackbar.show();
+            ((ImageView)(findViewById(R.id.connectionImg)))
+                    .setImageDrawable(getDrawable(R.drawable.ic_wifi_off));
+            noConnection = false;
+        }
     }
 }
