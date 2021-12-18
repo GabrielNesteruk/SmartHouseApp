@@ -1,7 +1,10 @@
 package com.example.smarthouse.network;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import com.example.smarthouse.App;
 import com.example.smarthouse.R;
@@ -15,6 +18,7 @@ public class PingService {
 
     private String ip;
     private Handler handler;
+    private ProgressBar loadingBar;
 
     public void pingServer(ResultCallback callback) {
 
@@ -46,6 +50,7 @@ public class PingService {
         handler.post(new Runnable() {
             @Override
             public void run() {
+                loadingBar.setVisibility(View.INVISIBLE);
                 callback.onComplete(result);
             }
         });

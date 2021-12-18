@@ -11,7 +11,7 @@
         <item name="colorOnSecondary">@color/black</item>
         <item name="colorPrimaryDark">@color/bloody</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">#D38108</item>
+        <item name="android:statusBarColor">#FFFFFF</item>
         <!-- Customize your theme here. -->
     </style>
     

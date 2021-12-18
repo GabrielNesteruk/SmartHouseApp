@@ -10,7 +10,15 @@
     <item android:title="Sterowanie">
         <menu>
             <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/recuperator_settings"
+                    android:icon="@drawable/ic_baseline_air_24"
+                    android:title="Rekuperator" />
 
+                <item
+                    android:id="@+id/heatpump_settings"
+                    android:icon="@drawable/ic_baseline_wb_sunny_24"
+                    android:title="Pompa ciepła" />
             </group>
         </menu>
     </item>

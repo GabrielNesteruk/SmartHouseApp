@@ -9,9 +9,10 @@ import lombok.ToString;
 @Setter
 @AllArgsConstructor
 @ToString
-public class CardViewHelper {
-    private String imageUrl;
+public class Room {
+    private int id;
     private String name;
     private String valueName;
     private String value;
+    private String imageUrl;
 }

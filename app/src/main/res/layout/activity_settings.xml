@@ -38,6 +38,6 @@
         android:layout_marginTop="15dp"
         android:backgroundTint="@color/black"
         android:text="Zapisz"
-        android:textColor="@color/white"/>
+        android:textColor="@color/white" />
 
 </RelativeLayout>
