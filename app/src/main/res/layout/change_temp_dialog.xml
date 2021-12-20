@@ -19,12 +19,13 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Podaj temperaturę, którą chcesz ustawić:"
+            android:text="Podaj temperaturę,\nktórą chcesz ustawić:"
             android:textStyle="bold"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="50dp"
             android:id="@+id/infoTempText"
-            android:textSize="18sp"/>
+            android:textSize="18sp"
+            android:padding="10dp"/>
 
         <EditText
             android:id="@+id/editTextNumberDecimal"

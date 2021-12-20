@@ -21,9 +21,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.smarthouse.network.ESP32Service;
@@ -32,6 +34,7 @@ import com.example.smarthouse.utility.RoomCardView.CardViewAdapter;
 import com.example.smarthouse.utility.RoomCardView.Room;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 
@@ -43,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private ImageView menuBurger;
     private ProgressBar loadingBar;
     private ImageView refreshImg;
+    private SwitchMaterial modeSwitch;
 
     private SharedPreferences mPreferences;
     private SharedPreferences.Editor mEditor;
@@ -76,12 +80,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         loadingBar = findViewById(R.id.loadingProgressBar);
         refreshImg = findViewById(R.id.refreshImg);
 
+        modeSwitch = navigationView.getHeaderView(0).findViewById(R.id.mode_switch);
+
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mEditor = mPreferences.edit();
         checkSharedPreferences();
 
         rooms = new ArrayList();
         esp32Service = new ESP32Service(this);
+        noConnection = true;
 
         mainHandler = new Handler(Looper.getMainLooper());
         pingService = new PingService(mPreferences.getString(getString(R.string.serverIp), ""), mainHandler, loadingBar);
@@ -100,6 +107,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         ImageView connectionImg = findViewById(R.id.connectionImg);
 
         navigationDrawer();
+        modeSwitchService();
+    }
+
+    private void modeSwitchService() {
+        modeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if(!isChecked)
+                    esp32Service.setHeatpumpControl(1);
+                else
+                    esp32Service.setHeatpumpControl(0);
+            }
+        });
     }
 
     private void navigationDrawer() {
@@ -113,6 +133,39 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
             else {
                 drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+        drawerLayout.addDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(@NonNull View drawerView, float slideOffset) {
+            }
+
+            @Override
+            public void onDrawerOpened(@NonNull View drawerView) {
+                esp32Service.getMode(new ESP32Service.ESP32ResponseListener() {
+                    @Override
+                    public void OnError() {
+
+                    }
+
+                    @Override
+                    public void OnResponse(Object obj) {
+                        if((boolean) obj)
+                            modeSwitch.setChecked(false);
+                        else
+                            modeSwitch.setChecked(true);
+                    }
+                });
+            }
+
+            @Override
+            public void onDrawerClosed(@NonNull View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
             }
         });
     }
@@ -138,9 +191,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivityForResult(settingsIntent, 1);
                 break;
             }
+            case R.id.heatpump_settings:
+            {
+                Intent heatpumpIntent = new Intent(this, HeatPumpActivity.class);
+                startActivity(heatpumpIntent);
+                break;
+            }
+            case R.id.recuperator_settings:
+            {
+                Intent recuperatorIntent = new Intent(this, RecuperatorActivity.class);
+                startActivity(recuperatorIntent);
+                break;
+            }
         }
 
         drawerLayout.closeDrawer(GravityCompat.START);
+        navigationView.setCheckedItem(R.id.nav_home);
 
         return true;
     }

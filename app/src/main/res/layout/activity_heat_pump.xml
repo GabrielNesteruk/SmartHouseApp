@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="15dp"
+    tools:context=".HeatPumpActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/arrow_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="50dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <ImageView
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="50dp"
+            android:layout_toRightOf="@id/arrow_back"
+            android:src="@drawable/ic_baseline_refresh_24" />
+
+        <TextView
+            android:id="@+id/nameTxt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/arrow_back"
+            android:layout_centerHorizontal="true"
+            android:text="SINCLAIR"
+            android:textSize="22dp"
+            android:textStyle="bold" />
+
+        <GridLayout
+            android:id="@+id/icons"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/status"
+            android:columnCount="4"
+            android:rowCount="1"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_ac"
+                android:layout_columnWeight="1"
+                android:id="@+id/modeAc" />
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_fire"
+                android:layout_columnWeight="1"
+                android:id="@+id/modeHeat"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_water"
+                android:layout_columnWeight="1"
+                android:id="@+id/modeDry"/>
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/ic_baseline_air_24"
+                android:layout_columnWeight="1"
+                android:id="@+id/modeFan"/>
+
+        </GridLayout>
+
+        <LinearLayout
+            android:id="@+id/status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/nameTxt"
+            android:layout_marginTop="20dp">
+
+            <com.google.android.material.textview.MaterialTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                android:text="Status: "
+                android:textSize="18sp" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/heatpumpStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/tempPanel"
+            android:layout_below="@id/icons"
+            app:cardCornerRadius="1dp"
+            app:cardElevation="11dp"
+            app:cardUseCompatPadding="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="20dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/thirdRow">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_thermostat"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Temperatura:"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/thirdRow"
+                    android:id="@+id/fourthRow"
+                    android:columnCount="2"
+                    android:rowCount="6"
+                    android:layout_centerHorizontal="true">
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="0"
+                        android:text="Zadana: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginTop="7dp"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="0"
+                        android:text="20 °C "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginTop="7dp"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/temp_set"/>
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="1"
+                        android:text="Otoczenia: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="1"
+                        android:text="20 °C "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/temp_panel"/>
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="2"
+                        android:text="Różnica: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="2"
+                        android:text="20 °C "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/temp_diff"/>
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="3"
+                        android:text="Wyciągu: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="3"
+                        android:text="20 °C "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/temp_extract"/>
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="4"
+                        android:text="Zewnętrzna: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="4"
+                        android:text="20 °C "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/temp_outdoor"/>
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="5"
+                        android:text="Nawiewu: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="5"
+                        android:text="20 °C "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/temp_supply"/>
+
+                </GridLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fourthRow"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:id="@+id/fifthRow">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/ic_baseline_power_24"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Zużycie energii:"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <GridLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/fifthRow"
+                    android:layout_centerHorizontal="true"
+                    android:columnCount="2"
+                    android:rowCount="3">
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="0"
+                        android:text="Aktualnie: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="0"
+                        android:text="36 W"
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/energy_current"/>
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="1"
+                        android:text="Średnia godz: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="1"
+                        android:text="0 W"
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/energy_hour"/>
+
+                    <TextView android:layout_column="0"
+                        android:layout_row="2"
+                        android:text="Dzisiaj: "
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"/>
+
+                    <TextView android:layout_column="1"
+                        android:layout_row="2"
+                        android:text="0 kWh"
+                        android:textSize="16sp"
+                        android:layout_columnWeight="1"
+                        android:layout_marginLeft="7dp"
+                        android:textStyle="bold"
+                        android:id="@+id/energy_today"/>
+
+                </GridLayout>
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tempPanel"
+            app:cardCornerRadius="1dp"
+            app:cardElevation="11dp"
+            app:cardUseCompatPadding="true">
+
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:columnCount="2"
+                android:rowCount="4"
+                android:padding="10dp"
+                android:layout_marginBottom="15dp"
+                android:layout_gravity="center">
+
+                <TextView android:text="Intensywność nawiewu: (0-6)"
+                    android:layout_columnWeight="1"
+                    android:textSize="16sp"
+                    android:layout_row="0"
+                    android:layout_column="0"
+                    android:layout_columnSpan="2"
+                    android:layout_marginTop="10dp"/>
+
+                <EditText
+                    android:id="@+id/supply_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="1"
+                    android:layout_column="0"
+                    android:ems="1"
+                    android:inputType="number"
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+
+                <Button android:text="USTAW"
+                    android:backgroundTint="@color/black"
+                    android:layout_column="1"
+                    android:layout_row="1"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/fanBtn"/>
+
+
+                <TextView android:text="Temperatura zadana:"
+                    android:layout_columnWeight="1"
+                    android:textSize="16sp"
+                    android:layout_row="2"
+                    android:layout_column="0"
+                    android:layout_columnSpan="2"
+                    android:layout_marginTop="8dp"/>
+
+                <EditText
+                    android:id="@+id/temp_set_value"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_row="3"
+                    android:layout_column="0"
+                    android:ems="1"
+                    android:inputType="number"
+                    android:layout_columnWeight="1"
+                    android:gravity="center"
+                    android:layout_marginTop="5dp"/>
+
+                <Button android:text="USTAW"
+                    android:backgroundTint="@color/black"
+                    android:layout_column="1"
+                    android:layout_row="3"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="5dp"
+                    android:id="@+id/tempSetBtn"/>
+
+            </GridLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </RelativeLayout>
+
+</ScrollView>
